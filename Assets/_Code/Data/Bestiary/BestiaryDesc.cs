@@ -44,6 +44,8 @@ namespace Aqua
 
         public string PluralName() { return Services.Loc.Localize(m_CommonNameId, true) + "s"; }
 
+        
+
         public IReadOnlyList<BFBase> Facts { get { return m_Facts; } }
         public IReadOnlyList<BFBase> InternalFacts { get { return m_InternalFacts; } }
         public IReadOnlyList<BFBase> AssumedFacts { get { return m_AssumedFacts; } }
@@ -106,19 +108,6 @@ namespace Aqua
             BFBase fact;
             m_FactMap.TryGetValue(inFactId, out fact);
             return fact;
-        }
-
-        public bool HasFactWithValue(out HashSet<StringHash32> factIds) {
-            bool res = false;
-            factIds = null;
-            foreach(var fact in Facts) {
-                if(fact.HasValue()) {
-                    if(factIds == null) factIds = new HashSet<StringHash32>() { fact.Id() };
-                    factIds.Add(fact.Id());
-                    res = true;
-                }
-            }
-            return res;
         }
 
         public TFact Fact<TFact>(StringHash32 inFactId) where TFact : BFBase

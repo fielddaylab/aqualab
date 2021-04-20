@@ -1,1 +1,13 @@
 # basePath RS-1B
+
+:: diveSite.probe
+@trigger    PlayerEnterRegion
+@when    scene:name == "RS-1B", scanned:RS-1B.probe, regionId = "probeScan"
+{@probe}    Beep, boop.. Welcome to Dive Site B! Which critter do you want me to check?
+$call Probe->AskForBestiaryEntry temp:critterImproveId
+$if !temp:critterImproveId
+    {@probe}    Looks like it doesn't need any additional data yet.
+$else
+    {@probe}    Collecting data...{wait [3]}{var-s temp:critterImproveId}s' data is finished!
+    $call Probe->ImproveRules
+$endif

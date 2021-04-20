@@ -14,15 +14,8 @@ namespace Aqua.Scripting
 {
     public class ScriptDiveSiteProbe : ScriptComponent
     {
-        #region Inspector
-
-        #endregion // Inspector
-
-        List<SerializedHash32> AllowedEntities = new List<SerializedHash32>();
-        BestiaryDesc selectedCritter = null;
-        StringHash32 probeCritterId = null;
-        HashSet<StringHash32> ImproveFactIds = null;
-
+        private StringHash32 probeCritterId = null;
+        private HashSet<StringHash32> ImproveFactIds = null;
 
         [LeafMember("AskForBestiaryEntry")]
         IEnumerator AskForBestiaryEntry()
@@ -30,7 +23,7 @@ namespace Aqua.Scripting
             Future<StringHash32> entity = BestiaryApp.RequestEntity(
                 BestiaryDescCategory.Critter, (critterId) => EntryHasValues(critterId));
             entity.OnComplete(StoreId);
-            entity.OnFail(() => Services.Data.SetVariable("probeScan:critter", null));
+            entity.OnFail(() => Services.Data.SetVariable("temp:improveId", null));
             
             yield return entity.Wait();
 
@@ -39,25 +32,30 @@ namespace Aqua.Scripting
         [LeafMember("ImproveRules")]
         public void ImproveRules()
         {
-            if(selectedCritter != null) AllowedEntities.Add(selectedCritter.Id());
             if(ImproveFactIds != null) {
                 foreach(var factId in ImproveFactIds) {
                     Services.Data.Profile.Bestiary.GetFact(factId).Add(PlayerFactFlags.KnowValue);
                 }
             }
-            selectedCritter = null;
             ImproveFactIds.Clear();
 
         }
 
         public bool EntryHasValues(BestiaryDesc critter) {
-            return critter.HasFactWithValue(out ImproveFactIds);
+            foreach(var fact in Services.Data.Profile.Bestiary.GetFactsForEntity(critter.Id())) 
+            {
+                if(fact.Fact.HasValue() & !fact.Has(PlayerFactFlags.KnowValue)) {
+                    ImproveFactIds.Add(fact.FactId);
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void StoreId(StringHash32 critterId) {
             probeCritterId = critterId;
-            selectedCritter = critterId != null ? Services.Assets.Bestiary.Get(critterId) : null;
-            Services.Data.SetVariable("probeScan:critter", selectedCritter.CommonName());
+            var critter = Services.Assets.Bestiary.Get(critterId);
+            Services.Data.SetVariable("temp:improveId", critter.CommonName());
         }
     }
 }
