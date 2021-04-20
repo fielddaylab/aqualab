@@ -54,7 +54,7 @@ namespace ProtoAqua.Modeling
         [NonSerialized] private bool m_Dragging;
         [NonSerialized] private bool m_Locked;
 
-        public Action<PlayerFactParams> OnLinkRequestRemove;
+        public Action<BestiaryDesc> OnNodeRequestToggle;
 
         #region Handlers
 
@@ -70,28 +70,20 @@ namespace ProtoAqua.Modeling
 
         private void OnLinkClicked(object inTag)
         {
-            if (m_Locked)
-                return;
-            
-            PlayerFactParams playerFact = inTag as PlayerFactParams;
-            if (playerFact == null)
-            {
-                BFBase fact = inTag as BFBase;
-                if (fact != null)
-                {
-                    playerFact = Services.Data.Profile.Bestiary.GetFact(fact.Id());
-                }
-            }
-
-            if (playerFact != null)
-            {
-                OnLinkRequestRemove?.Invoke(playerFact);
-            }
+            // if (m_Locked)
+            //     return;
         }
 
         private void OnNodeClicked(object inTag)
         {
-            // TODO: Something?
+            if (OnNodeRequestToggle == null)
+                return;
+
+            BestiaryDesc desc = inTag as BestiaryDesc;
+            if (desc != null)
+            {
+                OnNodeRequestToggle(desc);
+            }
         }
 
         private void LateUpdate()
@@ -301,12 +293,18 @@ namespace ProtoAqua.Modeling
 
         void IFactVisitor.Visit(BFProduce inFact, PlayerFactParams inParams)
         {
-            m_MapData.CreateNode(inFact.Parent().Id(), "critter", inFact.Parent());
+            ushort self = m_MapData.CreateNode(inFact.Parent().Id(), "critter", inFact.Parent());
+            var propertyDef = Services.Assets.WaterProp.Property(inFact.Target());
+            ushort target = m_MapData.CreateNode(propertyDef.Id(), "property", propertyDef);
+            m_MapData.CreateLink(inFact.Id(), self, target, "produce", inFact);
         }
 
         void IFactVisitor.Visit(BFConsume inFact, PlayerFactParams inParams)
         {
-            m_MapData.CreateNode(inFact.Parent().Id(), "critter", inFact.Parent());
+            ushort self = m_MapData.CreateNode(inFact.Parent().Id(), "critter", inFact.Parent());
+            var propertyDef = Services.Assets.WaterProp.Property(inFact.Target());
+            ushort target = m_MapData.CreateNode(propertyDef.Id(), "property", propertyDef);
+            m_MapData.CreateLink(inFact.Id(), self, target, "consume", inFact);
         }
 
         void IFactVisitor.Visit(BFStateStarvation inFact, PlayerFactParams inParams)

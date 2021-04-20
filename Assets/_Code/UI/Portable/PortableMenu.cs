@@ -119,6 +119,8 @@ namespace Aqua.Portable
 
             m_Canvas.enabled = true;
             m_Input.PushPriority();
+
+            base.OnShow(inbInstant);
         }
 
         protected override void OnHide(bool inbInstant)
@@ -133,11 +135,14 @@ namespace Aqua.Portable
             m_AppNavigationGroup.interactable = true;
 
             Services.Events?.Dispatch(GameEvents.PortableClosed);
+
+            base.OnHide(inbInstant);
         }
 
         protected override void OnHideComplete(bool inbInstant)
         {
             m_Canvas.enabled = false;
+            base.OnHideComplete(inbInstant);
         }
 
         protected override IEnumerator TransitionToShow()

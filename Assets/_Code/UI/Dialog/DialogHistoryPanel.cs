@@ -112,7 +112,6 @@ namespace Aqua
 
                 DialogHistoryNode node = m_NodePool.Alloc();
                 node.Text.color = textColor;
-                node.Text.fontStyle = currentCharacter.IsEmpty ? FontStyles.Italic : FontStyles.Normal;
                 node.Text.SetText(record.Text);
 
                 if (bShowName)
