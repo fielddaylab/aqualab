@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Aqua.Scripting;
+using Aqua.Title;
 using BeauUtil;
 using BeauUtil.Services;
 using FieldDay;
 using ProtoAqua.Experiment;
 using ProtoAqua.Modeling;
 using UnityEngine;
-using Aqua.Title;
 
 namespace Aqua
 {
@@ -55,22 +55,6 @@ namespace Aqua
         #region Logging Variables
 
         private SimpleLog m_Logger;
-        private enum m_EventCategories
-        {
-            accept_job,
-            receive_fact,
-            complete_job,
-            begin_experiment,
-            begin_dive,
-            begin_argument,
-            begin_model,
-            begin_simulation,
-            ask_for_help,
-            talk_with_guide,
-            simulation_sync_achieved,
-            guide_script_triggered
-        }
-
         private string m_CurrentJobId = string.Empty;
 
         #endregion // Logging Variables
@@ -79,7 +63,7 @@ namespace Aqua
 
         protected override void Initialize()
         {
-            m_Logger = new SimpleLog(m_AppId, m_AppVersion, null);
+            m_Logger = new SimpleLog(m_AppId, m_AppVersion);
             Services.Events.Register<StringHash32>(GameEvents.JobStarted, LogAcceptJob)
                 .Register<BestiaryUpdateParams>(GameEvents.BestiaryUpdated, LogReceiveFact)
                 .Register<StringHash32>(GameEvents.JobCompleted, LogCompleteJob)
@@ -139,6 +123,7 @@ namespace Aqua
 
         private void LogAcceptJob(StringHash32 jobId)
         {
+            #if !UNITY_EDITOR
             if (jobId.IsEmpty)
             {
                 m_CurrentJobId = string.Empty;
@@ -153,9 +138,7 @@ namespace Aqua
                 { "job_id", m_CurrentJobId }
             };
 
-            m_Logger.Log(new LogEvent(data, m_EventCategories.accept_job));
-
-            #if !UNITY_EDITOR
+            m_Logger.Log(new LogEvent(data, "accept_job"));
             FBAcceptJob(m_CurrentJobId);
             #endif
         }
@@ -174,6 +157,7 @@ namespace Aqua
 
         private void LogReceiveFact(BestiaryUpdateParams inParams)
         {
+            #if !UNITY_EDITOR
             if (inParams.Type == BestiaryUpdateParams.UpdateType.Fact)
             {
                 string parsedFactId = Services.Assets.Bestiary.Fact(inParams.Id).name;
@@ -183,16 +167,17 @@ namespace Aqua
                     { "fact_id", parsedFactId }
                 };
 
-                m_Logger.Log(new LogEvent(data, m_EventCategories.receive_fact));
+                m_Logger.Log(new LogEvent(data, "receive_fact"));
 
-                #if !UNITY_EDITOR
+                
                 FBReceiveFact(parsedFactId);
-                #endif
             }
+            #endif
         }
 
         private void LogCompleteJob(StringHash32 jobId)
         {
+            #if !UNITY_EDITOR
             string parsedJobId = Services.Assets.Jobs.Get(jobId).name;
 
             Dictionary<string, string> data = new Dictionary<string, string>()
@@ -200,17 +185,16 @@ namespace Aqua
                 { "job_id", parsedJobId }
             };
 
-            m_Logger.Log(new LogEvent(data, m_EventCategories.complete_job));
-
-            #if !UNITY_EDITOR
+            m_Logger.Log(new LogEvent(data, "complete_job"));
             FBCompleteJob(parsedJobId);
-            #endif
 
             m_CurrentJobId = string.Empty;
+            #endif
         }
 
         private void LogBeginExperiment(TankType inTankType)
         {
+            #if !UNITY_EDITOR
             string tankType = inTankType.ToString();
 
             Dictionary<string, string> data = new Dictionary<string, string>()
@@ -219,122 +203,114 @@ namespace Aqua
                 { "tank_type", tankType }
             };
 
-            m_Logger.Log(new LogEvent(data, m_EventCategories.begin_experiment));
-
-            #if !UNITY_EDITOR
+            m_Logger.Log(new LogEvent(data, "begin_experiment"));
             FBBeginExperiment(m_CurrentJobId, tankType);
             #endif
         }
 
         private void LogBeginDive(string inTargetScene)
         {
+            #if !UNITY_EDITOR
             Dictionary<string, string> data = new Dictionary<string, string>()
             {
                 { "job_id", m_CurrentJobId },
                 { "site_id", inTargetScene }
             };
 
-            m_Logger.Log(new LogEvent(data, m_EventCategories.begin_dive));
-
-            #if !UNITY_EDITOR
+            m_Logger.Log(new LogEvent(data, "begin_dive"));
             FBBeginDive(m_CurrentJobId, inTargetScene);
             #endif
         }
 
         private void LogBeginArgument()
         {
+            #if !UNITY_EDITOR
             Dictionary<string, string> data = new Dictionary<string, string>()
             {
                 { "job_id", m_CurrentJobId }
             };
 
-            m_Logger.Log(new LogEvent(data, m_EventCategories.begin_argument));
-
-            #if !UNITY_EDITOR
+            m_Logger.Log(new LogEvent(data, "begin_argument"));
             FBBeginArgument(m_CurrentJobId);
             #endif
         }
 
         private void LogBeginModel()
         {
+            #if !UNITY_EDITOR
             Dictionary<string, string> data = new Dictionary<string, string>()
             {
                 { "job_id", m_CurrentJobId }
             };
 
-            m_Logger.Log(new LogEvent(data, m_EventCategories.begin_model));
-
-            #if !UNITY_EDITOR
+            m_Logger.Log(new LogEvent(data, "begin_model"));
             FBBeginModel(m_CurrentJobId);
             #endif
         }
 
         private void LogBeginSimulation()
         {
+            #if !UNITY_EDITOR
             Dictionary<string, string> data = new Dictionary<string, string>()
             {
                 { "job_id", m_CurrentJobId }
             };
 
-            m_Logger.Log(new LogEvent(data, m_EventCategories.begin_simulation));
-
-            #if !UNITY_EDITOR
+            m_Logger.Log(new LogEvent(data, "begin_simulation"));
             FBBeginSimulation(m_CurrentJobId);
             #endif
         }
 
         private void LogAskForHelp(string nodeId)
         {
+
+
+            #if !UNITY_EDITOR
             Dictionary<string, string> data = new Dictionary<string, string>()
             {
                 { "node_id", nodeId }
             };
 
-            m_Logger.Log(new LogEvent(data, m_EventCategories.ask_for_help));
-
-            #if !UNITY_EDITOR
+            m_Logger.Log(new LogEvent(data, "ask_for_help"));
             FBAskForHelp(nodeId);
             #endif
         }
 
         private void LogTalkWithGuide(string nodeId)
         {
+            #if !UNITY_EDITOR
             Dictionary<string, string> data = new Dictionary<string, string>()
             {
                 { "node_id", nodeId }
             };
 
-            m_Logger.Log(new LogEvent(data, m_EventCategories.talk_with_guide));
-
-            #if !UNITY_EDITOR
+            m_Logger.Log(new LogEvent(data, "talk_with_guide"));
             FBTalkWithGuide(nodeId);
             #endif
         }
 
         private void LogSimulationSyncAchieved()
         {
+            #if !UNITY_EDITOR
             Dictionary<string, string> data = new Dictionary<string, string>()
             {
                 { "job_id", m_CurrentJobId }
             };
 
-            m_Logger.Log(new LogEvent(data, m_EventCategories.simulation_sync_achieved));
-
-            #if !UNITY_EDITOR
+            m_Logger.Log(new LogEvent(data, "simulation_sync_achieved"));
             FBSimulationSyncAchieved(m_CurrentJobId);
             #endif
         }
 
         private void LogGuideScriptTriggered(string nodeId)
         {
+            #if !UNITY_EDITOR
             Dictionary<string, string> data = new Dictionary<string, string>()
             {
                 { "node_id", nodeId }
             };
 
-            m_Logger.Log(new LogEvent(data, m_EventCategories.guide_script_triggered));
-
-            #if !UNITY_EDITOR
+            m_Logger.Log(new LogEvent(data, "guide_script_triggered"));
             FBGuideScriptTriggered(nodeId);
             #endif
         }
