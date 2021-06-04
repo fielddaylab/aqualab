@@ -12,6 +12,7 @@ namespace Aqua.WorldMap
     public class WorldMapCtrl : MonoBehaviour, ISceneLoadHandler, ISceneOptimizable
     {
         static public readonly StringHash32 Event_RequestChangeStation = "worldmap:request-change-station"; // StringHash32 stationId
+        static public readonly StringHash32 Event_ShipOut = "worldmap:ship-out"; // StringHash32 stationId;
 
         [SerializeField] private Transform m_PlayerTransform = null;
         [SerializeField] private Button m_ShipOutButton = null;
@@ -48,6 +49,7 @@ namespace Aqua.WorldMap
 
         private void OnShipOutClicked()
         {
+            Services.Events.Dispatch(Event_ShipOut, m_TargetStation);
             Routine.Start(this, ShipoutSequence()).TryManuallyUpdate(0);
         }
 

@@ -2,9 +2,11 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Aqua.Scripting;
 using Aqua.Title;
+using Aqua.WorldMap;
 using BeauUtil;
 using BeauUtil.Services;
 using FieldDay;
+using ProtoAqua.Argumentation;
 using ProtoAqua.Experiment;
 using ProtoAqua.Modeling;
 using UnityEngine;
@@ -28,11 +30,17 @@ namespace Aqua
         [DllImport("__Internal")]
         public static extern void FBAcceptJob(string jobId);
         [DllImport("__Internal")]
+        public static extern void FBSwitchJob(string jobId);
+        [DllImport("__Internal")]
         public static extern void FBReceiveFact(string factId);
         [DllImport("__Internal")]
         public static extern void FBCompleteJob(string jobId);
         [DllImport("__Internal")]
+        public static extern void FBTaskCompleted(string jobId, string taskId);
+        [DllImport("__Internal")]
         public static extern void FBBeginExperiment(string jobId, string tankType);
+        [DllImport("__Internal")]
+        public static extern void FBEndExperiment(string jobId, string tankType, float duration);
         [DllImport("__Internal")]
         public static extern void FBBeginDive(string jobId, string siteId);
         [DllImport("__Internal")]
@@ -46,16 +54,25 @@ namespace Aqua
         [DllImport("__Internal")]
         public static extern void FBTalkWithGuide(string nodeId);
         [DllImport("__Internal")]
+        public static extern void FBChangeRoom(string jobId, string roomId);
+        [DllImport("__Internal")]
+        public static extern void FBChangeStation(string jobId, string stationId);
+        [DllImport("__Internal")]
         public static extern void FBSimulationSyncAchieved(string jobId);
         [DllImport("__Internal")]
         public static extern void FBGuideScriptTriggered(string nodeId);
+        [DllImport("__Internal")]
+        public static extern void FBArgueValidResponse(string jobId, string nodeId);
+        [DllImport("__Internal")]
+        public static extern void FBArgueInvalidResponse(string jobId, string nodeId);
 
         #endregion // Firebase JS Functions
 
         #region Logging Variables
 
         private SimpleLog m_Logger;
-        private string m_CurrentJobId = string.Empty;
+        private string m_CurrentJobId = "";
+        private string m_CurrentTankType = "";
 
         #endregion // Logging Variables
 
@@ -65,15 +82,22 @@ namespace Aqua
         {
             m_Logger = new SimpleLog(m_AppId, m_AppVersion);
             Services.Events.Register<StringHash32>(GameEvents.JobStarted, LogAcceptJob)
+                .Register<StringHash32>(GameEvents.JobSwitched, LogSwitchJob)
                 .Register<BestiaryUpdateParams>(GameEvents.BestiaryUpdated, LogReceiveFact)
                 .Register<StringHash32>(GameEvents.JobCompleted, LogCompleteJob)
+                .Register<StringHash32>(GameEvents.JobTaskCompleted, LogTaskCompleted)
                 .Register<TankType>(ExperimentEvents.ExperimentBegin, LogBeginExperiment)
+                .Register<ExperimentResultData>(ExperimentEvents.ExperimentRequestSummary, LogEndExperiment)
                 .Register<string>(GameEvents.BeginDive, LogBeginDive)
                 .Register(GameEvents.BeginArgument, LogBeginArgument)
                 .Register(SimulationConsts.Event_Model_Begin, LogBeginModel)
                 .Register(SimulationConsts.Event_Simulation_Begin, LogBeginSimulation)
+                .Register<StringHash32>(GameEvents.RoomChanged, LogChangeRoom)
+                .Register<StringHash32>(WorldMapCtrl.Event_ShipOut, LogChangeStation)
                 .Register(SimulationConsts.Event_Simulation_Complete, LogSimulationSyncAchieved)
-                .Register<string>(GameEvents.ProfileStarting, OnTitleStart);
+                .Register<string>(GameEvents.ProfileStarting, OnTitleStart)
+                .Register<StringHash32>(ArgumentationEvents.ArgueValidResponse, LogArgueValidResponse)
+                .Register<StringHash32>(ArgumentationEvents.ArgueInvalidResponse, LogArgueInvalidResponse);
 
             Services.Script.OnTargetedThreadStarted += GuideHandler;
         }
@@ -126,7 +150,7 @@ namespace Aqua
             #if !UNITY_EDITOR
             if (jobId.IsEmpty)
             {
-                m_CurrentJobId = string.Empty;
+                m_CurrentJobId = "";
             }
             else
             {
@@ -145,14 +169,25 @@ namespace Aqua
 
         private void LogSwitchJob(StringHash32 jobId)
         {
+            string oldJobId = m_CurrentJobId;
+
             if (jobId.IsEmpty)
             {
-                m_CurrentJobId = string.Empty;
+                m_CurrentJobId = "";
             }
             else
             {
                 m_CurrentJobId = Services.Assets.Jobs.Get(jobId).name;
             }
+
+            Dictionary<string, string> data = new Dictionary<string, string>()
+            {
+                { "old_job_id", oldJobId },
+                { "new_job_id", m_CurrentJobId }
+            };
+
+            m_Logger.Log(new LogEvent(data, "switch_job"));
+            //FBSwitchJob(oldJobId, m_CurrentJobId);
         }
 
         private void LogReceiveFact(BestiaryUpdateParams inParams)
@@ -168,8 +203,6 @@ namespace Aqua
                 };
 
                 m_Logger.Log(new LogEvent(data, "receive_fact"));
-
-                
                 FBReceiveFact(parsedFactId);
             }
             #endif
@@ -188,24 +221,54 @@ namespace Aqua
             m_Logger.Log(new LogEvent(data, "complete_job"));
             FBCompleteJob(parsedJobId);
 
-            m_CurrentJobId = string.Empty;
+            m_CurrentJobId = "";
             #endif
+        }
+
+        private void LogTaskCompleted(StringHash32 taskId)
+        {
+            string parsedTaskId = taskId.ToString();
+
+            Dictionary<string, string> data = new Dictionary<string, string>()
+            {
+                { "job_id", m_CurrentJobId },
+                { "task_id", parsedTaskId }
+            };
+
+            m_Logger.Log(new LogEvent(data, "task_completed"));
+            //FBTaskCompleted(m_CurrentJobId, parsedTaskId);
         }
 
         private void LogBeginExperiment(TankType inTankType)
         {
             #if !UNITY_EDITOR
-            string tankType = inTankType.ToString();
+            m_CurrentTankType = inTankType.ToString();
 
             Dictionary<string, string> data = new Dictionary<string, string>()
             {
                 { "job_id", m_CurrentJobId },
-                { "tank_type", tankType }
+                { "tank_type", m_CurrentTankType }
             };
 
             m_Logger.Log(new LogEvent(data, "begin_experiment"));
-            FBBeginExperiment(m_CurrentJobId, tankType);
+            FBBeginExperiment(m_CurrentJobId, m_CurrentTankType);
             #endif
+        }
+
+        private void LogEndExperiment(ExperimentResultData result)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>()
+            {
+                { "job_id", m_CurrentJobId },
+                { "tank_type", m_CurrentTankType },
+                { "duration", result.Duration.ToString() }
+            };
+
+            Debug.Log(result.Duration.ToString());
+
+            m_Logger.Log(new LogEvent(data, "end_experiment"));
+            //FBEndExperiment(m_CurrentJobId, m_CurrentTankType, result.Duration);
+            m_CurrentTankType = "";
         }
 
         private void LogBeginDive(string inTargetScene)
@@ -263,8 +326,6 @@ namespace Aqua
 
         private void LogAskForHelp(string nodeId)
         {
-
-
             #if !UNITY_EDITOR
             Dictionary<string, string> data = new Dictionary<string, string>()
             {
@@ -287,6 +348,34 @@ namespace Aqua
             m_Logger.Log(new LogEvent(data, "talk_with_guide"));
             FBTalkWithGuide(nodeId);
             #endif
+        }
+
+        private void LogChangeRoom(StringHash32 roomId)
+        {
+            string parsedRoomId = roomId.ToString();
+
+            Dictionary<string, string> data = new Dictionary<string, string>()
+            {
+                { "job_id", m_CurrentJobId },
+                { "room_id", parsedRoomId }
+            };
+
+            m_Logger.Log(new LogEvent(data, "change_room"));
+            //FBChangeRoom(m_CurrentJobId, parsedRoomId);
+        }
+
+        private void LogChangeStation(StringHash32 stationId)
+        {
+            string parsedStationId = stationId.ToString();
+
+            Dictionary<string, string> data = new Dictionary<string, string>()
+            {
+                { "job_id", m_CurrentJobId },
+                { "station_id", parsedStationId }
+            };
+
+            m_Logger.Log(new LogEvent(data, "change_station"));
+            //FBChangeStation(m_CurrentJobId, parsedStationId);
         }
 
         private void LogSimulationSyncAchieved()
@@ -313,6 +402,34 @@ namespace Aqua
             m_Logger.Log(new LogEvent(data, "guide_script_triggered"));
             FBGuideScriptTriggered(nodeId);
             #endif
+        }
+
+        private void LogArgueValidResponse(StringHash32 nodeId)
+        {
+            string parsedNodeId = nodeId.ToString();
+
+            Dictionary<string, string> data = new Dictionary<string, string>()
+            {
+                { "job_id", m_CurrentJobId },
+                { "node_id", parsedNodeId }
+            };
+
+            m_Logger.Log(new LogEvent(data, "argue_valid_response"));
+            //FBArgueValidResponse(m_CurrentJobId, parsedNodeId);
+        }
+
+        private void LogArgueInvalidResponse(StringHash32 nodeId)
+        {
+            string parsedNodeId = nodeId.ToString();
+
+            Dictionary<string, string> data = new Dictionary<string, string>()
+            {
+                { "job_id", m_CurrentJobId },
+                { "node_id", parsedNodeId }
+            };
+
+            m_Logger.Log(new LogEvent(data, "argue_invalid_response"));
+            //FBArgueInvalidResponse(m_CurrentJobId, parsedNodeId);
         }
 
         #endregion // Log Events

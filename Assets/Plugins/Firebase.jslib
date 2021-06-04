@@ -16,6 +16,16 @@ mergeInto(LibraryManager.library, {
         });
     },
 
+    FBSwitchJob: function(oldJobId, newJobId) {
+        var oldJobId = Pointer_stringify(oldJobId);
+        var newJobId = Pointer_stringify(newJobId);
+
+        analytics.logEvent("switch_job", {
+            old_job_id: oldJobId,
+            new_job_id: newJobId
+        });
+    },
+
     FBReceiveFact: function(factId) {
         var factId = Pointer_stringify(factId);
 
@@ -32,12 +42,33 @@ mergeInto(LibraryManager.library, {
         });
     },
 
+    FBTaskCompleted: function(jobId, taskId) {
+        var jobId = Pointer_stringify(jobId);
+        var taskId = Pointer_stringify(taskId);
+
+        analytics.logEvent("task_completed", {
+            job_id: jobId,
+            task_id: taskId
+        });
+    },
+
     FBBeginExperiment: function(jobId, tankType) {
         var jobId = Pointer_stringify(jobId);
 
         analytics.logEvent("begin_experiment", {
             job_id: jobId,
             tank_type: tankType
+        });
+    },
+
+    FBEndExperiment: function(jobId, tankType, duration) {
+        var jobId = Pointer_stringify(jobId);
+        var tankType = Pointer_stringify(tankType);
+
+        analytics.logEvent("end_experiment", {
+            job_id: jobId,
+            tank_type: tankType,
+            duration: duration
         });
     },
 
@@ -103,6 +134,46 @@ mergeInto(LibraryManager.library, {
         var nodeId = Pointer_stringify(nodeId);
 
         analytics.logEvent("guide_script_triggered", {
+            node_id: nodeId
+        });
+    },
+
+    FBChangeRoom: function(jobId, roomId) {
+        var jobId = Pointer_stringify(jobId);
+        var roomId = Pointer_stringify(roomId);
+
+        analytics.logEvent("change_room", {
+            job_id: jobId,
+            room_id: roomId
+        });
+    },
+
+    FBChangeStation: function(jobId, stationId) {
+        var jobId = Pointer_stringify(jobId);
+        var stationId = Pointer_stringify(station_id);
+
+        analytics.LogEvent("change_station", {
+            job_id: jobId,
+            station_id: stationId
+        });
+    }
+
+    FBArgueValidResponse: function(jobId, nodeId) {
+        var jobId = Pointer_stringify(jobId);
+        var nodeId = Pointer_stringify(nodeId);
+
+        analytics.logEvent("argue_valid_response", {
+            job_id: jobId,
+            node_id: nodeId
+        });
+    },
+
+    FBArgueInvalidResponse: function(jobId, nodeId) {
+        var jobId = Pointer_stringify(jobId)
+        var nodeId = Pointer_stringify(nodeId);
+
+        analytics.logEvent("argue_invalid_response", {
+            job_id: jobId,
             node_id: nodeId
         });
     }

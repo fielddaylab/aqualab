@@ -82,6 +82,8 @@ namespace Aqua.Ship
                 table.Set("roomId", inRoom.Id());
                 Services.Script.TriggerResponse(Trigger_RoomEnter, null, null, table);
             }
+
+            Services.Events.Dispatch(GameEvents.RoomChanged, inRoom.Id());
         }
 
         private IEnumerator RoomTransition(Room inNextRoom)

@@ -102,11 +102,13 @@ namespace ProtoAqua.Argumentation
                 {
                     if (m_Conditions.CheckConditions(nextNode, id))
                     {
+                        Services.Events.Dispatch(ArgumentationEvents.ArgueValidResponse, id);
                         m_CurrentNode = nextNode;
                         return m_CurrentNode;
                     }
                     else
                     {
+                        Services.Events.Dispatch(ArgumentationEvents.ArgueInvalidResponse, id);
                         return m_CurrentNode = FindNode(m_CurrentNode.InvalidNodeId);
                     }
                 }
@@ -119,6 +121,8 @@ namespace ProtoAqua.Argumentation
             }
             else
             {
+                Services.Events.Dispatch(ArgumentationEvents.ArgueInvalidResponse, id);
+
                 // If id isn't valid, display invalid fact node
                 if (m_CurrentNode.InvalidNodeId != null)
                 {

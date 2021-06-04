@@ -34,8 +34,8 @@ namespace Aqua
 
         static public readonly StringHash32 VariableSet = "data:variable-set"; // TableKeyPair variableId
 
-        static public readonly StringHash32 BeginDive = "dive:begin";
-        static public readonly StringHash32 BeginArgument = "argument:begin";
+        static public readonly StringHash32 BeginDive = "dive:begin"; // string siteId
+        static public readonly StringHash32 BeginArgument = "argument:begin"; // no args
 
         static public readonly StringHash32 PortableOpened = "portable:opened"; // IPortableRequest request
         static public readonly StringHash32 PortableClosed = "portable:closed"; // no args
@@ -54,5 +54,6 @@ namespace Aqua
 
         static public readonly StringHash32 ActChanged = "act:changed"; // uint actIndex
         static public readonly StringHash32 StationChanged = "station:changed"; // StringHash32 stationId
+        static public readonly StringHash32 RoomChanged = "room:changed"; //
     }
 }
