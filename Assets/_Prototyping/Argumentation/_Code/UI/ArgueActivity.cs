@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Aqua;
@@ -16,6 +16,8 @@ namespace ProtoAqua.Argumentation
     {
         static public readonly StringHash32 Event_SelectClaim = "argue:select-claim";
         static public readonly StringHash32 Event_OpenFactSelect = "argue:open-fact-select";
+        static public readonly StringHash32 Event_ValidClaim = "argue:valid-claim";
+        static public readonly StringHash32 Event_InvalidClaim = "argue:invalid-claim";
 
         [Serializable]
         public class ChatPool : SerializablePool<ArgueChatLine> { }

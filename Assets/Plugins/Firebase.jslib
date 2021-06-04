@@ -42,11 +42,11 @@ mergeInto(LibraryManager.library, {
         });
     },
 
-    FBTaskCompleted: function(jobId, taskId) {
+    FBCompleteTask: function(jobId, taskId) {
         var jobId = Pointer_stringify(jobId);
         var taskId = Pointer_stringify(taskId);
 
-        analytics.logEvent("task_completed", {
+        analytics.logEvent("complete_task", {
             job_id: jobId,
             task_id: taskId
         });
@@ -158,21 +158,21 @@ mergeInto(LibraryManager.library, {
         });
     }
 
-    FBArgueValidResponse: function(jobId, nodeId) {
+    FBArgueValidClaim: function(jobId, nodeId) {
         var jobId = Pointer_stringify(jobId);
         var nodeId = Pointer_stringify(nodeId);
 
-        analytics.logEvent("argue_valid_response", {
+        analytics.logEvent("argue_valid_claim", {
             job_id: jobId,
             node_id: nodeId
         });
     },
 
-    FBArgueInvalidResponse: function(jobId, nodeId) {
+    FBArgueInvalidClaim: function(jobId, nodeId) {
         var jobId = Pointer_stringify(jobId)
         var nodeId = Pointer_stringify(nodeId);
 
-        analytics.logEvent("argue_invalid_response", {
+        analytics.logEvent("argue_invalid_claim", {
             job_id: jobId,
             node_id: nodeId
         });

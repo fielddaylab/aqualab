@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Aqua.Scripting;
-using Aqua.Title;
 using Aqua.WorldMap;
 using BeauUtil;
 using BeauUtil.Services;
@@ -36,7 +35,7 @@ namespace Aqua
         [DllImport("__Internal")]
         public static extern void FBCompleteJob(string jobId);
         [DllImport("__Internal")]
-        public static extern void FBTaskCompleted(string jobId, string taskId);
+        public static extern void FBCompleteTask(string jobId, string taskId);
         [DllImport("__Internal")]
         public static extern void FBBeginExperiment(string jobId, string tankType);
         [DllImport("__Internal")]
@@ -62,9 +61,9 @@ namespace Aqua
         [DllImport("__Internal")]
         public static extern void FBGuideScriptTriggered(string nodeId);
         [DllImport("__Internal")]
-        public static extern void FBArgueValidResponse(string jobId, string nodeId);
+        public static extern void FBArgueValidClaim(string jobId, string nodeId);
         [DllImport("__Internal")]
-        public static extern void FBArgueInvalidResponse(string jobId, string nodeId);
+        public static extern void FBArgueInvalidClaim(string jobId, string nodeId);
 
         #endregion // Firebase JS Functions
 
@@ -85,7 +84,7 @@ namespace Aqua
                 .Register<StringHash32>(GameEvents.JobSwitched, LogSwitchJob)
                 .Register<BestiaryUpdateParams>(GameEvents.BestiaryUpdated, LogReceiveFact)
                 .Register<StringHash32>(GameEvents.JobCompleted, LogCompleteJob)
-                .Register<StringHash32>(GameEvents.JobTaskCompleted, LogTaskCompleted)
+                .Register<StringHash32>(GameEvents.JobTaskCompleted, LogCompleteTask)
                 .Register<TankType>(ExperimentEvents.ExperimentBegin, LogBeginExperiment)
                 .Register<ExperimentResultData>(ExperimentEvents.ExperimentRequestSummary, LogEndExperiment)
                 .Register<string>(GameEvents.BeginDive, LogBeginDive)
@@ -96,8 +95,8 @@ namespace Aqua
                 .Register<StringHash32>(WorldMapCtrl.Event_ShipOut, LogChangeStation)
                 .Register(SimulationConsts.Event_Simulation_Complete, LogSimulationSyncAchieved)
                 .Register<string>(GameEvents.ProfileStarting, OnTitleStart)
-                .Register<StringHash32>(ArgumentationEvents.ArgueValidResponse, LogArgueValidResponse)
-                .Register<StringHash32>(ArgumentationEvents.ArgueInvalidResponse, LogArgueInvalidResponse);
+                .Register<StringHash32>(ArgueActivity.Event_ValidClaim, LogArgueValidClaim)
+                .Register<StringHash32>(ArgueActivity.Event_InvalidClaim, LogArgueInvalidClaim);
 
             Services.Script.OnTargetedThreadStarted += GuideHandler;
         }
@@ -225,9 +224,10 @@ namespace Aqua
             #endif
         }
 
-        private void LogTaskCompleted(StringHash32 taskId)
+        private void LogCompleteTask(StringHash32 taskId)
         {
-            string parsedTaskId = taskId.ToString();
+            string parsedTaskId = taskId.ToDebugString();
+            Debug.Log(parsedTaskId);
 
             Dictionary<string, string> data = new Dictionary<string, string>()
             {
@@ -235,8 +235,8 @@ namespace Aqua
                 { "task_id", parsedTaskId }
             };
 
-            m_Logger.Log(new LogEvent(data, "task_completed"));
-            //FBTaskCompleted(m_CurrentJobId, parsedTaskId);
+            m_Logger.Log(new LogEvent(data, "complete_task"));
+            //FBCompleteTask(m_CurrentJobId, parsedTaskId);
         }
 
         private void LogBeginExperiment(TankType inTankType)
@@ -352,7 +352,8 @@ namespace Aqua
 
         private void LogChangeRoom(StringHash32 roomId)
         {
-            string parsedRoomId = roomId.ToString();
+            string parsedRoomId = roomId.ToDebugString();
+            Debug.Log(parsedRoomId);
 
             Dictionary<string, string> data = new Dictionary<string, string>()
             {
@@ -366,7 +367,8 @@ namespace Aqua
 
         private void LogChangeStation(StringHash32 stationId)
         {
-            string parsedStationId = stationId.ToString();
+            string parsedStationId = stationId.ToDebugString();
+            Debug.Log(parsedStationId);
 
             Dictionary<string, string> data = new Dictionary<string, string>()
             {
@@ -404,9 +406,10 @@ namespace Aqua
             #endif
         }
 
-        private void LogArgueValidResponse(StringHash32 nodeId)
+        private void LogArgueValidClaim(StringHash32 nodeId)
         {
-            string parsedNodeId = nodeId.ToString();
+            string parsedNodeId = nodeId.ToDebugString();
+            Debug.Log("valid " + parsedNodeId);
 
             Dictionary<string, string> data = new Dictionary<string, string>()
             {
@@ -414,13 +417,14 @@ namespace Aqua
                 { "node_id", parsedNodeId }
             };
 
-            m_Logger.Log(new LogEvent(data, "argue_valid_response"));
-            //FBArgueValidResponse(m_CurrentJobId, parsedNodeId);
+            m_Logger.Log(new LogEvent(data, "argue_valid_claim"));
+            //FBArgueValidClaim(m_CurrentJobId, parsedNodeId);
         }
 
-        private void LogArgueInvalidResponse(StringHash32 nodeId)
+        private void LogArgueInvalidClaim(StringHash32 nodeId)
         {
-            string parsedNodeId = nodeId.ToString();
+            string parsedNodeId = nodeId.ToDebugString();
+            Debug.Log("invalid " + parsedNodeId);
 
             Dictionary<string, string> data = new Dictionary<string, string>()
             {
@@ -428,8 +432,8 @@ namespace Aqua
                 { "node_id", parsedNodeId }
             };
 
-            m_Logger.Log(new LogEvent(data, "argue_invalid_response"));
-            //FBArgueInvalidResponse(m_CurrentJobId, parsedNodeId);
+            m_Logger.Log(new LogEvent(data, "argue_invalid_claim"));
+            //FBArgueInvalidClaim(m_CurrentJobId, parsedNodeId);
         }
 
         #endregion // Log Events
