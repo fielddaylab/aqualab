@@ -37,11 +37,11 @@ namespace ProtoAqua.Experiment
             m_Spine = bull == null ? giant.GetSpine() : bull.GetSpine();
             if(bull != null)
             {
-                height = ((BoxCollider2D) m_Collider).size.y;
+                height = inParent.transform.position.y;
             }
             else
             {
-                height = inParent.Body.WorldTransform.GetPosition(Axis.Y, Space.World).y;
+                height = inParent.Body.WorldTransform.position.y;
             }
             root = inParent.Body.WorldTransform.position.x;
             position = m_Spine.transform.position;

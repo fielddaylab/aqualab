@@ -19,6 +19,8 @@ namespace ProtoAqua.Experiment
         [SerializeField] private SetupElementDisplay m_EnvironmentDisplay = null;
         [SerializeField] private SetupElementDisplay m_CritterDisplay = null;
         [SerializeField] private SetupElementDisplay m_PropertyDisplay = null;
+
+        [SerializeField] private SetupElementDisplay m_StressDisplay = null;
         [SerializeField] private Button m_BackButton = null;
 
         #endregion // Inspector
@@ -48,6 +50,7 @@ namespace ProtoAqua.Experiment
                         m_EnvironmentDisplay.gameObject.SetActive(false);
                         PopulateCritter(Setup.CritterId);
                         PopulateProperty(Setup.PropertyId);
+                        PopulateStress(Setup.EnvironmentId, Setup.CritterId);
                         break;
                     }
 
@@ -82,6 +85,21 @@ namespace ProtoAqua.Experiment
             m_EnvironmentDisplay.gameObject.SetActive(true);
             var env = Services.Assets.Bestiary.Get(inEnvironmentId);
             m_EnvironmentDisplay.Load(env.Icon(), env.CommonName());
+        }
+
+        private void PopulateStress(StringHash32 inEnvironmentId, StringHash32 inCritterId)
+        {
+            var env = Services.Assets.Bestiary.Get(inEnvironmentId);
+            var critter = Services.Assets.Bestiary.Get(inCritterId);
+            var state = critter.GetStateForEnvironment(BestiaryUtils.GenerateInitialState(env));
+            if(state == ActorStateId.Stressed)
+            {
+                m_StressDisplay.gameObject.SetActive(true);
+            }
+            else
+            {
+                m_StressDisplay.gameObject.SetActive(false);
+            }
         }
     }
 }
