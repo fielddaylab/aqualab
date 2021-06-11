@@ -1747,20 +1747,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ActorRoot: {fileID: 3772213010103089822}
   m_ActorNavHelper: {fileID: 5746480830119913913}
-  m_ActorSpawns:
-  - ActorId: BullKelp
-    ActorCount: 1
-  - ActorId: GiantKelp
-    ActorCount: 1
-  - ActorId: Urchin
-    ActorCount: 1
-  - ActorId: SeaOtter
-    ActorCount: 1
-  - ActorId: StaghornCoral
-    ActorCount: 7
-  - ActorId: Sargassum
-    ActorCount: 6
+  m_TankType: 2
   m_Text: {fileID: 2076216696}
+  m_SpawnDelay: 0.05
 --- !u!1 &880864970
 GameObject:
   m_ObjectHideFlags: 0
@@ -2700,6 +2689,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3107538836301762488, guid: 5a86c0ff3c825a14897345586040d890,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3107538836301762488, guid: 5a86c0ff3c825a14897345586040d890,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3107538836301762488, guid: 5a86c0ff3c825a14897345586040d890,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3107538836301762488, guid: 5a86c0ff3c825a14897345586040d890,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3210576109516516680, guid: 5a86c0ff3c825a14897345586040d890,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -2749,6 +2758,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DefaultSceneUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 8608181864556943687, guid: 5a86c0ff3c825a14897345586040d890,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8608181864556943687, guid: 5a86c0ff3c825a14897345586040d890,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8608181864556943687, guid: 5a86c0ff3c825a14897345586040d890,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8608181864556943687, guid: 5a86c0ff3c825a14897345586040d890,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8728641111995542721, guid: 5a86c0ff3c825a14897345586040d890,
         type: 3}
@@ -2915,15 +2944,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ActorRoot: {fileID: 454058816}
   m_ActorNavHelper: {fileID: 1629677763}
-  m_ActorSpawns:
-  - ActorId: BullKelp
-    ActorCount: 2
-  - ActorId: GiantKelp
-    ActorCount: 2
-  - ActorId: Urchin
-    ActorCount: 6
-  - ActorId: SeaOtter
-    ActorCount: 2
+  m_TankType: 3
   m_SpawnDelay: 0.05
   m_WaterColor: {fileID: 141478289}
 --- !u!4 &1629677762
@@ -5124,6 +5145,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078433970805356524, guid: 86593a88918bfa640ba206450ca7871f,
+        type: 3}
+      propertyPath: m_TankType
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8078433970805356524, guid: 86593a88918bfa640ba206450ca7871f,
         type: 3}

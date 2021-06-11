@@ -14,7 +14,7 @@ namespace ProtoAqua.Experiment
 
         [SerializeField] private LocText m_Text = null;
 
-        // [SerializeField] private ColorGroup m_WaterColor = null;
+        [SerializeField] private float m_SpawnDelay = 0.05f;
 
         #endregion // Inspector
 
@@ -25,8 +25,6 @@ namespace ProtoAqua.Experiment
         protected override void Awake()
         {
             base.Awake();
-            // m_CurrentColor = m_WaterColor.GetColor();
-            // m_defAlpha = m_WaterColor.GetAlpha();
         }
 
 
@@ -36,8 +34,6 @@ namespace ProtoAqua.Experiment
 
             Services.Events.Register<StringHash32>(ExperimentEvents.SetupAddActor, SetupAddActor, this)
                 .Register<StringHash32>(ExperimentEvents.SetupRemoveActor, SetupRemoveActor, this);
-                // .Register<WaterPropertyId>(ExperimentEvents.StressorColor, ChangeColor, this);
-
             m_AudioLoop = Services.Audio.PostEvent("tank_water_loop");
         }
 
@@ -91,31 +87,24 @@ namespace ProtoAqua.Experiment
 
         private void SetupAddActor(StringHash32 inActorId)
         {
-            ActorCtrl actor = ExperimentServices.Actors.Pools.Alloc(inActorId, m_ActorRoot);
-            actor.Nav.Helper = m_ActorNavHelper;
-            actor.Nav.Spawn(0);
+            // ActorCtrl actor = ExperimentServices.Actors.Pools.Alloc(inActorId, m_ActorRoot);
+            // actor.Nav.Helper = m_ActorNavHelper;
+            // actor.Nav.Spawn(0);
+
+            int spawnCount = GetSettings().GetSpawnCount(m_TankType, inActorId);
+            while(spawnCount-- > 0)
+            {
+                ActorCtrl actor = ExperimentServices.Actors.Pools.Alloc(inActorId, m_ActorRoot);
+                actor.Nav.Helper = m_ActorNavHelper;
+                actor.Nav.Spawn(spawnCount * RNG.Instance.NextFloat(0.8f, 1.2f) * m_SpawnDelay);
+            }
         }
 
-        // public void ChangeColor(WaterPropertyId Id) {
-        //     foreach(var prop in Services.Assets.WaterProp.Objects) {
-        //         if(prop.Index() == Id){
-        //             var pColor = prop.Color();
-        //             pColor.a = m_defAlpha;
-        //             m_WaterColor.SetColor(pColor);
-        //             break;
-        //         }
-        //     }
-        // }
 
         private void SetupRemoveActor(StringHash32 inActorId)
         {
             ExperimentServices.Actors.Pools.Reset(inActorId);
             Services.UI.WorldFaders.Flash(Color.black, 0.2f);
-        }
-
-        public override int GetSpawnCount(StringHash32 inActorId)
-        {
-            return 1;
         }
     }
     

@@ -105,7 +105,7 @@ namespace ProtoAqua.Experiment
 
         private void SetupAddActor(StringHash32 inActorId)
         {
-            int spawnCount = GetSpawnCount(inActorId);
+            int spawnCount = GetSettings().GetSpawnCount(m_TankType, inActorId);
             while(spawnCount-- > 0)
             {
                 ActorCtrl actor = ExperimentServices.Actors.Pools.Alloc(inActorId, m_ActorRoot);

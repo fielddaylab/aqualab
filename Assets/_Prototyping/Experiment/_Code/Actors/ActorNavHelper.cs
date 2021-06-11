@@ -67,13 +67,6 @@ namespace ProtoAqua.Experiment
 
         }
 
-        // public Vector2 GetClimbWall(float inSideOffset, float heightOffset, float currHeight, bool descend=false)
-        // {
-        //     Rect r = Rect();
-
-
-        // }
-
         public bool ReachedTheFloor(Vector2 position, float inFloorOffset) {
             Rect r = Rect();
             return position.y <= (r.yMin + inFloorOffset);

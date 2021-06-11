@@ -14,15 +14,19 @@ namespace ProtoAqua.Experiment
 
         [SerializeField] protected Transform m_ActorRoot = null;
         [SerializeField] protected ActorNavHelper m_ActorNavHelper = null;
-        [SerializeField] private SpawnCount[] m_ActorSpawns = null;
+        // [SerializeField] private SpawnCount[] m_ActorSpawns = null;
+
+        [SerializeField] protected TankType m_TankType = TankType.None;
 
         #endregion // Inspector
 
         [NonSerialized] protected BaseInputLayer m_BaseInput;
+        [NonSerialized] protected ExperimentSettings m_Settings;
 
         protected virtual void Awake()
         {
             m_BaseInput = BaseInputLayer.Find(this);
+            m_Settings = Services.Tweaks.Get<ExperimentSettings>();
         }
 
         protected virtual void OnEnable() { }
@@ -40,11 +44,16 @@ namespace ProtoAqua.Experiment
             Routine.StopAll(this);
         }
 
-        public virtual int GetSpawnCount(StringHash32 inActorId)
+        public virtual ExperimentSettings GetSettings()
         {
-            int val;
-            m_ActorSpawns.TryGetValue(inActorId, out val);
-            return val;
+            return m_Settings;
         }
+
+        // public virtual int GetSpawnCount(StringHash32 inActorId)
+        // {
+        //     int val;
+        //     m_ActorSpawns.TryGetValue(inActorId, out val);
+        //     return val;
+        // }
     }
 }

@@ -31,10 +31,17 @@ namespace ProtoAqua.Experiment
         [NonSerialized] private ActorNavHelper m_Helper = null;
         [NonSerialized] private Routine m_MoveRoutine;
 
+        [NonSerialized] private Transform m_Front;
+
         public ActorNavHelper Helper
         {
             get { return m_Helper; }
             set { m_Helper = value; }
+        }
+
+        public Transform Front
+        {
+            get; set;
         }
 
         public bool IsAnimating()
@@ -106,6 +113,69 @@ namespace ProtoAqua.Experiment
         }
 
         #endregion // Swim
+
+        #region Traversal
+
+        public IEnumerator TraverseAnimation()
+        {
+            switch(m_TraversalType)
+            {
+                case ActorTraversalType.Swim:
+                    yield return SwimTraverse();
+                    break;
+                default:
+                    break;
+                    
+            }
+        }
+
+        // public void RotateActor(Vector3 nextPosition)
+        // {
+        //     float turnSpeed = GetProperty<float>("swimSpeed", 0.5f);
+        //     Vector3 LookAt = nextPosition - Actor.Body.RenderGroup.transform.position;
+        //     Actor.Body.RenderGroup.transform.rotation = Quaternion.Slerp(Actor.Body.WorldTransform.rotation, Quaternion.LookRotation(LookAt), turnSpeed * Time.deltaTime);
+        // }
+
+        public void RotateActor(Vector3 nextPosition)
+        {
+            // float turnSpeed = GetProperty<float>("swimSpeed", 0.5f);
+            // Vector3 LookAt = nextPosition - Actor.Body.RenderGroup.transform.position;
+            // Actor.Body.WorldTransform.rotation = Quaternion.Slerp(Actor.Body.WorldTransform.rotation, Quaternion.LookRotation(LookAt), turnSpeed * Time.deltaTime);
+
+
+            Vector3 CurrPosition = Actor.Body.RenderGroup.transform.position;
+            Vector3 TargetDirection = nextPosition - CurrPosition;
+            Vector3 CurrDirection = GetCurrDirection();
+            float y = 0;
+            float angle = Vector3.Angle(GetCurrDirection(), TargetDirection);
+            if (angle > 90f && angle < 270f)
+            {
+                angle = 180f - angle;
+                y = 180f;
+            }
+            Actor.Body.WorldTransform.Rotate(0f, y, angle);
+
+            return;
+
+        }
+
+        private Vector3 GetCurrDirection()
+        {
+            return Front.position - Actor.Body.WorldTransform.position;
+        }
+
+
+        private IEnumerator SwimTraverse()
+        {
+            Vector3 NextPosition = Actor.Nav.Helper.GetRandomSwimTarget(
+                            Actor.Body.BodyRadius, Actor.Body.BodyRadius, Actor.Body.BodyRadius);
+            RotateActor(NextPosition);
+
+            yield return Actor.Nav.SwimTo(NextPosition);
+            yield return RNG.Instance.NextFloat(GetProperty<float>("MinSwimDelay", 0.5f), GetProperty<float>("MaxSwimDelay", 1));
+        }
+
+        #endregion //Traversal
 
         #region Listeners
 

@@ -23,6 +23,21 @@ MonoBehaviour:
     ShortLabelId:
       m_Source: experiment.tank.foundational.label.short
       m_Hash: 3117711178
+    ActorSpawns:
+    - ActorId: Urchin
+      ActorCount: 6
+    - ActorId: SeaOtter
+      ActorCount: 3
+    - ActorId: GiantKelp
+      ActorCount: 5
+    - ActorId: BullKelp
+      ActorCount: 5
+    - ActorId: Sargassum
+      ActorCount: 6
+    - ActorId: StaghornCoral
+      ActorCount: 4
+    - ActorId: BlueTang
+      ActorCount: 4
     Icon: {fileID: 8960352495143728702, guid: 82d5fae2d67414c4dbb61fe67dd6d4be, type: 3}
     SingleCritter: 0
     TankOn: 1
@@ -36,6 +51,21 @@ MonoBehaviour:
     ShortLabelId:
       m_Source: experiment.tank.stressor.label.short
       m_Hash: 2082120015
+    ActorSpawns:
+    - ActorId: Urchin
+      ActorCount: 6
+    - ActorId: SeaOtter
+      ActorCount: 2
+    - ActorId: Sargassum
+      ActorCount: 6
+    - ActorId: GiantKelp
+      ActorCount: 5
+    - ActorId: BullKelp
+      ActorCount: 4
+    - ActorId: BlueTang
+      ActorCount: 4
+    - ActorId: StaghornCoral
+      ActorCount: 5
     Icon: {fileID: 3750138325868158549, guid: 82d5fae2d67414c4dbb61fe67dd6d4be, type: 3}
     SingleCritter: 1
     TankOn: 1
@@ -49,6 +79,21 @@ MonoBehaviour:
     ShortLabelId:
       m_Source: experiment.tank.measurement.label.short
       m_Hash: 1744372958
+    ActorSpawns:
+    - ActorId: SeaOtter
+      ActorCount: 2
+    - ActorId: Urchin
+      ActorCount: 6
+    - ActorId: StaghornCoral
+      ActorCount: 5
+    - ActorId: BullKelp
+      ActorCount: 5
+    - ActorId: GiantKelp
+      ActorCount: 5
+    - ActorId: BlueTang
+      ActorCount: 3
+    - ActorId: Sargassum
+      ActorCount: 6
     Icon: {fileID: 4482492341634263206, guid: 82d5fae2d67414c4dbb61fe67dd6d4be, type: 3}
     SingleCritter: 1
     TankOn: 1

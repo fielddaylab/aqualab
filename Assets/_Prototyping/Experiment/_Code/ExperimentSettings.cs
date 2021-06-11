@@ -20,6 +20,8 @@ namespace ProtoAqua.Experiment
             public ExpSubscreen[] Sequence;
             public TextId LabelId;
             public TextId ShortLabelId;
+
+            public SpawnCount[]ActorSpawns;
             public Sprite Icon;
             public bool SingleCritter;
             public bool TankOn;
@@ -62,6 +64,14 @@ namespace ProtoAqua.Experiment
         public Color SetupButtonColor(bool inbEnabled)
         {
             return inbEnabled ? m_EnabledButtonColor : m_DisabledButtonColor;
+        }
+
+        public int GetSpawnCount(TankType inType, StringHash32 inActorId)
+        {
+            int val;
+            TankDefinition def = GetTank(inType);
+            def.ActorSpawns.TryGetValue(inActorId, out val);
+            return val;
         }
 
         public uint ThinkSpacing() { return m_ThinkTickSpacing; }

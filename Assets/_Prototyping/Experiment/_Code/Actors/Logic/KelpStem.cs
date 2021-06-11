@@ -59,6 +59,7 @@ namespace ProtoAqua.Experiment
 
         public void ResetPosition(Vector3 point) {
             root = point.x;
+            height = point.y;
             position = point;
         }
 
