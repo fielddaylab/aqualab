@@ -11,6 +11,7 @@ TagManager:
   - CreatureEnvFeature
   - FoodSource
   - Climbable
+  - GlyphLock
   layers:
   - Default
   - TransparentFX
