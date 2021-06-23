@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class MoveableGlyph : MonoBehaviour
 {
-    public GameObject holderObj;
+    public GlyphLockController lockController;
+
+    //public GameObject holderObj;
     public int glyphId;
 
+    /*
     enum MoveState
     { 
     inHolder,
@@ -15,6 +18,7 @@ public class MoveableGlyph : MonoBehaviour
     }
 
     MoveState state = MoveState.inHolder;
+    */
 
 
     // Start is called before the first frame update
@@ -26,23 +30,29 @@ public class MoveableGlyph : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         if (state == MoveState.beingClicked)
         {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mousePos.z = 0;
 
             transform.position = mousePos;
-        }
+        }*/
     }
 
     private void OnMouseDown()
     {
+        lockController.SelectGlyph(gameObject);
+        /*
         if (state == MoveState.inHolder)
             state = MoveState.beingClicked;
+        */
     }
 
-    private void OnMouseUp()
+
+    /*private void OnMouseUp()
     {
+        
         Vector3 boxSize = new Vector3(0.125f, 0.125f, 0.1f);
         Collider[] hitCollider = Physics.OverlapBox(transform.position, boxSize);
         foreach (Collider col in hitCollider)
@@ -58,6 +68,7 @@ public class MoveableGlyph : MonoBehaviour
             }
         }
         BackToHolder();
+        
     }
 
     //Returns glyph back to staring position
@@ -65,5 +76,5 @@ public class MoveableGlyph : MonoBehaviour
     {
         state = MoveState.inHolder;
         transform.position = holderObj.transform.position;
-    }
+    }*/
 }

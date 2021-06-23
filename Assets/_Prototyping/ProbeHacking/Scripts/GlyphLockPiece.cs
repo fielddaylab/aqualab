@@ -7,6 +7,8 @@ public class GlyphLockPiece : MonoBehaviour
 {
     public int glyphId;
     public Color correctColor;
+    public Color defaultColor;
+
     GlyphLockController glyphController;
 
     public enum GlyphLockState
@@ -24,16 +26,16 @@ public class GlyphLockPiece : MonoBehaviour
         glyphController = transform.parent.gameObject.GetComponent<GlyphLockController>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
-    public void CorrectPieceMatched()
+    public void Unlock()
     {
         lockState = GlyphLockState.open;
         GetComponent<SpriteRenderer>().color = correctColor;
-        glyphController.CheckLocks();
+    }
+
+    public void ReLock()
+    {
+        lockState = GlyphLockState.locked;
+        GetComponent<SpriteRenderer>().color = defaultColor;
     }
 }

@@ -1,0 +1,120 @@
+{
+   "__serializerVersion": 2,
+   "__version": 2,
+   "id": "6b56eafe-9b36-46ea-b5b7-3277215d3619",
+   "lastUpdated": 1.32689588480749E+17,
+   "character": {
+      "displayName": null,
+      "pronouns": "Neutral"
+   },
+   "inventory": {
+      "__version": 2,
+      "items": [
+         {
+            "id": 374439154,
+            "value": 100
+         },
+         {
+            "id": 4214442830
+         }
+      ],
+      "scannerIds": [
+      ],
+      "upgradeIds": [
+      ],
+      "waterProps": 7
+   },
+   "script": {
+      "actIndex": 0,
+      "visited": [
+         2546170579
+      ],
+      "globals": {
+         "name": 503252654,
+         "values": [
+         ]
+      },
+      "jobs": {
+         "name": 3825668221,
+         "values": [
+         ]
+      },
+      "player": {
+         "name": 748274432,
+         "values": [
+         ]
+      },
+      "partner": {
+         "name": 1674645177,
+         "values": [
+         ]
+      }
+   },
+   "bestiary": {
+      "__version": 2,
+      "allEntities": [
+      ],
+      "allFacts": [
+      ],
+      "graphedFacts": [
+      ]
+   },
+   "jobs": {
+      "currentJobId": 0,
+      "jobStatuses": [
+      ],
+      "completedJobs": [
+      ],
+      "unlockedJobs": [
+      ],
+      "completedTasks": [
+      ]
+   },
+   "map": {
+      "__version": 2,
+      "stationId": 2724389503,
+      "unlockedStations": [
+         2724389503
+      ],
+      "currentMapId": 0,
+      "timeOfDay": 352,
+      "days": 0,
+      "weekday": "Tuesday",
+      "timeMode": "Normal"
+   },
+   "options": {
+      "__version": 2,
+      "audio": {
+         "__version": 3,
+         "master": {
+            "volume": 1,
+            "mute": false
+         },
+         "sfx": {
+            "volume": 0.800000011920929,
+            "mute": false
+         },
+         "music": {
+            "volume": 0.800000011920929,
+            "mute": false
+         },
+         "voice": {
+            "volume": 0.800000011920929,
+            "mute": false
+         },
+         "mono": false
+      },
+      "gameplay": {
+         "movementMode": "Hold",
+         "observationMode": "Hold",
+         "observationAction": "Hold"
+      },
+      "performance": {
+         "framerate": "Stable"
+      },
+      "accessibility": {
+         "tts": "Off",
+         "flags": "0"
+      }
+   }
+}

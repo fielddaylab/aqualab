@@ -195,6 +195,8 @@ namespace ProtoAqua.Observation
                     Services.Audio.PostEvent("scan_complete");
                 }
             }
+            m_TargetScannable.TryStartMinigame();
+
             scanUI.ShowScan(data, result);
         }
 

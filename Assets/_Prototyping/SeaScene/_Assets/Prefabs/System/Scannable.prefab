@@ -80,6 +80,9 @@ MonoBehaviour:
   m_ScanId: 
   m_AttachedTo: {fileID: 0}
   m_LockToCursor: 0
+  isAProbe: 0
+  probeHackSceneManager: {fileID: 0}
+  completedHackMinigame: 0
   m_Collider: {fileID: 5470274429010608828}
   m_RootTransform: {fileID: 6812580154704463482}
   m_StateTransform: {fileID: 78085826181186191}

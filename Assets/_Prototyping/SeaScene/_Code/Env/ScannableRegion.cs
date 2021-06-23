@@ -18,6 +18,11 @@ namespace ProtoAqua.Observation
         [SerializeField] private string m_ScanId = null;
         [SerializeField] private Transform m_AttachedTo = null;
         [SerializeField] private bool m_LockToCursor = false;
+
+        [Header("Probe Hacking")]
+        public bool isAProbe;
+        public ProbeHackSceneManager probeHackSceneManager;
+        public bool completedHackMinigame = false;
         
         [Header("Collisions")]
         [SerializeField, Required] private Collider2D m_Collider = null;
@@ -202,6 +207,12 @@ namespace ProtoAqua.Observation
             }
 
             return ScanResult.NoChange;
+        }
+
+        public void TryStartMinigame()
+        {
+            if ((isAProbe) && (completedHackMinigame == false))
+                probeHackSceneManager.LoadProbeHack(this);
         }
 
         #endregion // Scanning
