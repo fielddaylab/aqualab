@@ -120,14 +120,20 @@ public class GlyphLockController : MonoBehaviour
         //Set all glyphs in lock to green
         foreach (GameObject glyphLock in glyphLocks)
         {
-            glyphLock.GetComponent<SpriteRenderer>().color = allUnlocked;
+            glyphLock.GetComponent<Image>().color = allUnlocked;
         }
     }
 
     //Pressing X or Checkmark buttons close scene
     private void OnMouseDown()
     {
-        if (GameObject.Find("ProbeHackSceneManager") != null)
-            GameObject.Find("ProbeHackSceneManager").GetComponent<ProbeHackSceneManager>().UnloadProbeHack(unlocked);
+        if (GameObject.Find("ProbeHackParent") != null)
+            GameObject.Find("ProbeHackParent").GetComponent<ProbeHackSceneManager>().UnloadProbeHack(unlocked);
     }
+
+    public void ClickCheckMark()
+    {
+        if (unlocked)
+            OnMouseDown();
+    }    
 }

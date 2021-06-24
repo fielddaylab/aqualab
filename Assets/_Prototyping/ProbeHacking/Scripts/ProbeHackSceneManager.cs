@@ -4,44 +4,40 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Aqua;
 using ProtoAqua.Observation;
+using UnityEngine.UI;
 
 public class ProbeHackSceneManager : MonoBehaviour
 {
     public GameObject probeHackParent;
-    public GameObject playerObj;
 
     ScannableRegion probeScannableRegion;
 
-    public PlayerROVScanner scanner;
+    public BaseInputLayer m_Input;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        //Debug.Log("Is m_Input null: "+(m_Input == null).ToString());
+        m_Input = BaseInputLayer.Find(this);
     }
 
     public void LoadProbeHack(ScannableRegion probeScanRegion)
     {
         probeScannableRegion = probeScanRegion;
-        probeHackParent.SetActive(true);
-        playerObj.SetActive(false);
 
-        //SceneManager.LoadScene(probehackScene, LoadSceneMode.Additive);
+        EnableRaycast();
+        probeHackParent.SetActive(true);
+
+        m_Input.PushPriority();
     }
 
     public void UnloadProbeHack(bool wasUnlocked)
     {
+        m_Input.PopPriority();
+        probeHackParent.SetActive(false);
+
         if (wasUnlocked)
         {
-            probeHackParent.SetActive(false);
-            playerObj.SetActive(true);
-
             probeScannableRegion.completedHackMinigame = true;
             //probeScannableRegion.CompleteScan();     
         }
@@ -50,5 +46,10 @@ public class ProbeHackSceneManager : MonoBehaviour
     private void OnMouseDown()
     {
         LoadProbeHack(null);
+    }
+
+    private void EnableRaycast()
+    {
+        GetComponent<GraphicRaycaster>().enabled = true;
     }
 }

@@ -32,7 +32,7 @@ namespace Aqua.Portable
 
         #endregion // Inspector
 
-        [NonSerialized] private BaseInputLayer m_Input;
+        /*[NonSerialized]*/ [SerializeField] private BaseInputLayer m_Input;
         [NonSerialized] private IPortableRequest m_Request;
         [NonSerialized] private VariantTable m_Table;
 

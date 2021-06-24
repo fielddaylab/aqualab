@@ -40,8 +40,9 @@ public class MoveableGlyph : MonoBehaviour
         }*/
     }
 
-    private void OnMouseDown()
+    public void OnClick()
     {
+        Debug.Log("Clicked");
         lockController.SelectGlyph(gameObject);
         /*
         if (state == MoveState.inHolder)

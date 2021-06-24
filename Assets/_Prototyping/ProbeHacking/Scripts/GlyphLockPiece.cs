@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GlyphLockPiece : MonoBehaviour
 {
@@ -30,12 +31,12 @@ public class GlyphLockPiece : MonoBehaviour
     public void Unlock()
     {
         lockState = GlyphLockState.open;
-        GetComponent<SpriteRenderer>().color = correctColor;
+        GetComponent<Image>().color = correctColor;
     }
 
     public void ReLock()
     {
         lockState = GlyphLockState.locked;
-        GetComponent<SpriteRenderer>().color = defaultColor;
+        GetComponent<Image>().color = defaultColor;
     }
 }
