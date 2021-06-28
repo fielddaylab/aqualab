@@ -12,3 +12,21 @@ Classification: Cool Kelp Forest
 Temperature: Cool
 Oxygen: High
 Kelp Population: Stable
+
+:: glyph1
+@scanDuration 2
+@important
+@header GLYPH 466972
+First Glyph in the sequence
+
+:: glyph2
+@scanDuration 2
+@important
+@header GLYPH 536563
+Second Glyph in the sequence
+
+:: glyph3
+@scanDuration 2
+@important
+@header GLYPH 546869
+Third Glyph in the sequence

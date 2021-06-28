@@ -26,6 +26,9 @@ TextureImporter:
   - first:
       213: 3773280772805954056
     second: glyphs-sheet_7
+  - first:
+      213: -2514066366791144897
+    second: glyphs-sheet_8
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -131,7 +134,7 @@ TextureImporter:
         width: 5
         height: 5
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -152,7 +155,7 @@ TextureImporter:
         width: 5
         height: 5
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -173,7 +176,7 @@ TextureImporter:
         width: 5
         height: 5
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -194,7 +197,7 @@ TextureImporter:
         width: 5
         height: 5
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -215,7 +218,7 @@ TextureImporter:
         width: 5
         height: 5
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -236,7 +239,7 @@ TextureImporter:
         width: 5
         height: 5
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -257,7 +260,7 @@ TextureImporter:
         width: 5
         height: 5
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -278,7 +281,7 @@ TextureImporter:
         width: 5
         height: 5
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -286,6 +289,27 @@ TextureImporter:
       bones: []
       spriteID: 80a09e40fd26d5430800000000000000
       internalID: 3773280772805954056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: glyphs-sheet_8
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3a28a1a5fd3c1dd0800000000000000
+      internalID: -2514066366791144897
       vertices: []
       indices: 
       edges: []

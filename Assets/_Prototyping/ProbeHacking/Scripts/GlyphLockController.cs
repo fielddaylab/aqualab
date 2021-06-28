@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Aqua;
 
 
 public class GlyphLockController : MonoBehaviour
@@ -10,9 +11,9 @@ public class GlyphLockController : MonoBehaviour
     public List<GameObject> glyphLocks = new List<GameObject>();
     List<GameObject> enteredGlyphs = new List<GameObject>();
 
-    public Color allUnlocked;
+    public ProbeHackSceneManager probeHackSceneManager;
 
-    public BoxCollider2D checkmarkCollider;
+    public Color allUnlocked;
 
     public GameObject checkObj;
     public ProbeHackTextHeader textHeader;
@@ -90,6 +91,9 @@ public class GlyphLockController : MonoBehaviour
         //Make header and outline flash
         textHeader.FlashRed();
 
+        //Audio error noise
+        Services.Audio.PostEvent("scan_complete");
+
         //Re-enable all entered glyphs
         foreach (GameObject enteredGlyph in enteredGlyphs)
             enteredGlyph.SetActive(true);
@@ -110,11 +114,13 @@ public class GlyphLockController : MonoBehaviour
     {
         unlocked = true;
 
+        //Play unlock sound
+        Services.Audio.PostEvent("scan_logbook");
+
         //Change text and color of header
         textHeader.LockOpened();
 
-        //Enable and animate check mark
-        checkmarkCollider.enabled = true;
+        //Animate check mark
         checkObj.GetComponent<Animator>().Play("CheckFlash");
 
         //Set all glyphs in lock to green
@@ -124,16 +130,17 @@ public class GlyphLockController : MonoBehaviour
         }
     }
 
-    //Pressing X or Checkmark buttons close scene
-    private void OnMouseDown()
-    {
-        if (GameObject.Find("ProbeHackParent") != null)
-            GameObject.Find("ProbeHackParent").GetComponent<ProbeHackSceneManager>().UnloadProbeHack(unlocked);
-    }
-
     public void ClickCheckMark()
     {
         if (unlocked)
-            OnMouseDown();
+            probeHackSceneManager.UnloadProbeHack(true);
     }    
+
+    public void ClickXButton()
+    {
+        if (unlocked)
+            ClickCheckMark();
+        else
+            probeHackSceneManager.UnloadProbeHack(false);
+    }
 }

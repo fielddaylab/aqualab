@@ -5,10 +5,12 @@ using UnityEngine.SceneManagement;
 using Aqua;
 using ProtoAqua.Observation;
 using UnityEngine.UI;
+using System;
 
 public class ProbeHackSceneManager : MonoBehaviour
 {
     public GameObject probeHackParent;
+    public GameObject[] scannableGlyphs;
 
     ScannableRegion probeScannableRegion;
 
@@ -39,8 +41,16 @@ public class ProbeHackSceneManager : MonoBehaviour
         if (wasUnlocked)
         {
             probeScannableRegion.completedHackMinigame = true;
+
+            DisableScannableGlyphs();
             //probeScannableRegion.CompleteScan();     
         }
+    }
+
+    private void DisableScannableGlyphs()
+    {
+        foreach (GameObject go in scannableGlyphs)
+            go.SetActive(false);
     }
 
     private void OnMouseDown()
