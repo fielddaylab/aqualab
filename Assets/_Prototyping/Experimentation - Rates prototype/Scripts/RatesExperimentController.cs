@@ -161,7 +161,7 @@ public class RatesExperimentController : MonoBehaviour
                     break;
                 }
 
-            default: //2+ species
+            case(2): //2 species
                 {
                     //Repro Text
                     reproText.text = "NO RESULTS\nToo many species to accurately measure reproduction";
@@ -178,6 +178,20 @@ public class RatesExperimentController : MonoBehaviour
                         //Eat Rate
                         CheckDisplayEatRate(activeSpeciesIndex);
                     }
+
+                    //Water Text
+                    waterText.text = "NO RESULTS\nToo many species to accurately measure water changes";
+
+                    break;
+                }
+
+            default: //3+ species
+                {
+                    //Repro Text
+                    reproText.text = "NO RESULTS\nToo many species to accurately measure reproduction";
+
+                    //Eat Text
+                    eatText.text = "NO RESULTS\nToo many species to accurately measure predation";
 
                     //Water Text
                     waterText.text = "NO RESULTS\nToo many species to accurately measure water changes";
