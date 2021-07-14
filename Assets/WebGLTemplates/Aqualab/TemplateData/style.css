@@ -26,10 +26,6 @@ body {
     transform: translate(-50%, -50%);
 }
 
-canvas { 
-    cursor: none !important;
-}
-
 .webgl-content .logo, .progress {
     position: absolute;
     left: 50%;
