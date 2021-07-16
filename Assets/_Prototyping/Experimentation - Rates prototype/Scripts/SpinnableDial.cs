@@ -66,6 +66,6 @@ public class SpinnableDial : MonoBehaviour
 
     void UpdateText()
     {
-        text.text = currVal.ToString("F2") + unit; 
+        text.text = currVal.ToString("F1") + unit; 
     }
 }
