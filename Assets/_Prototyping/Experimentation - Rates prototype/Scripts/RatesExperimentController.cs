@@ -7,6 +7,7 @@ public class RatesExperimentController : MonoBehaviour
 {
     //GiantKelp, Urchin, Otter, BullKelp
     bool[] selectedSpecies = { false, false, false, false };
+    public CritterStressDisplay[] critterArray;
     public Sprite[] critterSprites;
     public bool autoFeederEnabled = false;
     public bool waterStabilizerEnabled = false;
@@ -15,6 +16,9 @@ public class RatesExperimentController : MonoBehaviour
     public GameObject addSpeciesCanvas;
     public GameObject measurementTankCanvas;
     public GameObject measurementTankCritters;
+
+    [Header("Water Chem Values")]
+    public float[] waterChemValues; //Temp, Light, O2
 
     [Header("RatesProgress")]
     public GameObject progressBacking;
@@ -70,6 +74,12 @@ public class RatesExperimentController : MonoBehaviour
     {
         measurementTankCanvas.SetActive(false);
         addSpeciesCanvas.SetActive(true);
+    }
+
+    public void UpdateWaterChemistry()
+    {
+        foreach (CritterStressDisplay critter in critterArray)
+            critter.UpdateStressState(waterChemValues[0], waterChemValues[1], waterChemValues[2]);
     }
 
     public void StartRun()
@@ -207,6 +217,8 @@ public class RatesExperimentController : MonoBehaviour
         //Assume all critters reproduce
         reproRateObj.SetActive(true);
         reproCritter.sprite = critterSprites[activeSpecies[0]];
+
+        CheckDisplayStressIcon(activeSpecies[0], reproCritter);
     }
 
     void CheckDisplayEatRate(List<int> activeSpecies)
@@ -221,6 +233,9 @@ public class RatesExperimentController : MonoBehaviour
         {
             preyCritter.sprite = critterSprites[0];
             predatorCritter.sprite = critterSprites[1];
+
+            CheckDisplayStressIcon(0, preyCritter);
+            CheckDisplayStressIcon(1, predatorCritter);
         }
 
         //Urchin Eats BullKelp
@@ -228,6 +243,9 @@ public class RatesExperimentController : MonoBehaviour
         {
             preyCritter.sprite = critterSprites[3];
             predatorCritter.sprite = critterSprites[1];
+
+            CheckDisplayStressIcon(3, preyCritter);
+            CheckDisplayStressIcon(1, predatorCritter);
         }
 
         //Otter Eats Urchin
@@ -235,6 +253,9 @@ public class RatesExperimentController : MonoBehaviour
         {
             preyCritter.sprite = critterSprites[1];
             predatorCritter.sprite = critterSprites[2];
+
+            CheckDisplayStressIcon(1, preyCritter);
+            CheckDisplayStressIcon(2, predatorCritter);
         }
     }
 
@@ -243,5 +264,15 @@ public class RatesExperimentController : MonoBehaviour
         //Assume all critters change water chemistry
         waterRateObj.SetActive(true);
         waterCritter.sprite = critterSprites[activeSpecies[0]];
+
+        CheckDisplayStressIcon(activeSpecies[0], waterCritter);
+    }
+
+    void CheckDisplayStressIcon(int critterId, Image parentObj)
+    {
+        if (critterArray[critterId].isStressed)
+            parentObj.transform.GetChild(0).gameObject.SetActive(true);
+        else
+            parentObj.transform.GetChild(0).gameObject.SetActive(false);
     }
 }

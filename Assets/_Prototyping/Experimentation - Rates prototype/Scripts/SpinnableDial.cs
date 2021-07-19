@@ -17,9 +17,17 @@ public class SpinnableDial : MonoBehaviour
     public Text text;
     public string unit;
 
+    public RatesExperimentController expController;
+
+    public int waterChemIndex; //0 = temp, 1 = light, 2 = o2
+
+    bool inC;
+
     // Start is called before the first frame update
     void Start()
     {
+        inC = false;
+
         range = maxVal - minVal;
         SetCurrVal(minVal + range / 2);
     }
@@ -47,6 +55,12 @@ public class SpinnableDial : MonoBehaviour
         float percent = ValToPercent(newVal);
         UpdateDial(percent*-180);
         UpdateText();
+
+        if (inC)
+            expController.waterChemValues[waterChemIndex] = CToF(currVal);
+        else
+            expController.waterChemValues[waterChemIndex] = currVal;
+        expController.UpdateWaterChemistry();
     }
 
     float ValToPercent(float val)
@@ -67,5 +81,55 @@ public class SpinnableDial : MonoBehaviour
     void UpdateText()
     {
         text.text = currVal.ToString("F1") + unit; 
+    }
+
+    public void SwapUnits()
+    {
+        if (inC)
+            SwapToF();
+        else
+            SwapToC();
+
+        inC = !inC;
+
+        range = range = maxVal - minVal;
+
+        SetCurrVal(currVal);
+        UpdateText();
+    }
+
+    void SwapToF()
+    {
+        unit = " °F";
+
+        minVal = CToF(minVal);
+        maxVal = CToF(maxVal);
+
+        currVal = CToF(currVal);
+    }
+
+    void SwapToC()
+    {
+        unit = " °C";
+
+        minVal = FToC(minVal);
+        maxVal = FToC(maxVal);
+
+        currVal = FToC(currVal);
+    }
+
+    public float FToC(float degF)
+    {
+        return ((5f / 9f) * (degF - 32f));
+    }
+
+    public float CToF(float degC)
+    {
+        return (((9f / 5f) * degC) + 32f);
+    }
+
+    public bool InC()
+    {
+        return inC;
     }
 }
